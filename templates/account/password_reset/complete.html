@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="content">
+  <h1>Восстановление пароля завершено</h1>
+
+  <p>Ваш пароль был сохранен. Теперь вы можете войти.</p>
+
+  <p><a href="{{ login_url }}?next=/">Войти</a></p>
+</div>
+{% endblock %}

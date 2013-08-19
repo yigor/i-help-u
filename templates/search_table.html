@@ -1,0 +1,19 @@
+{% for object in object_list %}
+  <div class="article">
+    {% if object.3 == 1 %}
+    <h1><a href="{% url 'article' object.0 %}">{{ object.1 }}</a></h1>
+    <p><a href="{% url 'article' object.0 %}">{{ object.2 }}</a></p>
+    {% elif object.3 == 2 %}
+      <h1><a href="{% url 'vacancy_detail' object.0 %}">{{ object.1 }}</a></h1>
+      <p><a href="{% url 'vacancy_detail' object.0 %}">{{ object.2 }}</a></p>
+    {% elif object.3 == 3 %}
+      <h1><a href="{% url 'organization_detail' object.0 %}">{{ object.1 }}</a></h1>
+      <p><a href="{% url 'organization_detail' object.0 %}">{{ object.2 }}</a></p>
+    {% elif object.3 == 4 %}
+      <h1><a href="{% url 'account:profile_show' object.0 %}">{{ object.1 }} {{ object.2 }}</a></h1>
+    {% endif %}
+    <hr {% if forloop.last %}class="last-line" style="visibility: hidden;"{% endif %}>
+  </div>
+{% endfor %}
+{% if page_obj.has_next %}<button class="btn-load-more" onclick="loadMore(this)" data-load-url="{% url 'search' %}"
+                                  data-next-page="{{ page_obj.next_page_number }}" {% if page_obj.link_postfix %}data-link_postfix="{{ page_obj.link_postfix|iriencode }}"{% endif %}>ЗАГРУЗИТЬ ЕЩЁ</button>{% endif %}

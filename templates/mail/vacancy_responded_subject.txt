@@ -1,0 +1,1 @@
+{% autoescape off %}Пользователь {{ site_name }} откликнулся на вашу вакансию{% endautoescape %}

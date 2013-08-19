@@ -1,0 +1,30 @@
+{% load ulogin_tags %}
+<div class="login-register">
+  <div class="log-reg">
+    <form id="ajax-form" method="post" action="{% url 'account:login' %}{% if next %}?next={{ next }}{% endif %}">
+      {% csrf_token %}
+      <div class="form_description">
+        <h2>вход</h2>
+        <a class="register" href="{% url 'account:register' %}">Регистрация </a>
+      </div>
+      <ul>
+        {% include 'form.html' %}
+      </ul>
+
+      <div><input id="ajax-submit" type="submit" name="enter" value="Войти на сайт"/>
+        <p><a class="password-reset" href="{% url 'password_reset' %}">Восстановить пароль</a></p>
+      </div>
+
+    </form>
+    <div class="lrsocials">
+
+      <p>Войти с помощью — </p>
+      <div id="uLogin-{{ rand }}" class="uLogin"
+           x-ulogin-params="display=buttons&fields=first_name,last_name,email&optional=nickname,bdate,sex,photo,photo_big,city,phone&providers=vkontakte,facebook&hidden=&receiver=http%3A//{{ domain }}/static/xd_custom.html&redirect_uri=http%3A//{{ domain }}/ulogin/postback/%3Fnext%3D{{ next|urlencode }}">
+          <img src="/static/img/lrvk.png" x-ulogin-button="vkontakte"/>
+          <img src="/static/img/lrfb.png" x-ulogin-button="facebook"/>
+      </div>
+    </div>
+  </div>
+
+</div>

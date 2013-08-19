@@ -1,0 +1,19 @@
+<div class="login-register">
+  <div class="log-reg">
+  <form id="ajax-form" method="post" action="{% url 'password_reset' %}">
+    {% csrf_token %}
+    <div class="form_description">
+      <h2>Восстановление пароля</h2>
+      <a class="login" href="{% url 'account:login' %}">Вход</a>
+    </div>
+    <ul>
+    {% include 'form.html' %}
+    </ul>
+
+    <div><input id="ajax-submit" type="submit" name="reg" value="ВОССТАНОВИТЬ" />
+    </div>
+
+  </form>
+  </div>
+
+</div>

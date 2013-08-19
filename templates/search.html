@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Поиск{% endblock %}
+{% block content %}
+<div class="content">
+  <div class="vacancy-search">
+    <h1>Поиск</h1>
+
+    <form method="get" action="" id="vacancy-search">
+      <input class="vac-search" name="q" type="text" size="50" value="{{ search|default:'' }}" placeholder=""/>
+      {% if section %}<input name="section" type="hidden" value="{{ section }}"/>{% endif %}
+      <input class="btn-vac-search" type="submit" value="ИСКАТЬ">
+    </form>
+  </div>
+  <aside class="aside-left">
+    <h2>РАЗДЕЛЫ</h2>
+    <ul class="subnav">
+      <li {% if not section %}class="active"{% endif %}>
+        <a href="{% url 'search' %}{% if search %}?q={{ search }}{% endif %}">ВСЕ</a>
+      </li>
+      <li {% if section == 'article' %}class="active"{% endif %}>
+        <a href="?section=article{% if search %}&q={{ search }}{% endif %}">СТАТЬИ</a>
+      </li>
+      <li {% if section == 'vacancy' %}class="active"{% endif %}>
+        <a href="?section=vacancy{% if search %}&q={{ search }}{% endif %}">ВАКАНСИИ</a>
+      </li>
+      <li {% if section == 'org' %}class="active"{% endif %}>
+        <a href="?section=org{% if search %}&q={{ search }}{% endif %}">ОРГАНИЗАЦИИ</a>
+      </li>
+      <li {% if section == 'user' %}class="active"{% endif %}>
+        <a href="?section=user{% if search %}&q={{ search }}{% endif %}">ЛЮДИ</a>
+      </li>
+    </ul>
+  </aside>
+  <div id="update-block" class="content-block content-right">
+    {% include 'search_table.html' %}
+  </div>
+</div>
+{% endblock %}

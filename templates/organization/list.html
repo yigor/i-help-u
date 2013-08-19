@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Организации{% endblock %}
+{% block content %}
+<div class="content">
+  <aside class="aside-left">
+    <h1>Организации</h1>
+    <ul class="subnav filter">
+      <li{% if not active_topics %} class="active"{% endif %}><a href="{% url 'organization_list' %}" class="clear-filter">ВСЕ</a></li>
+    </ul>
+    <h2>ТЕМЫ</h2>
+    <ul class="subnav filter">
+    {% for topic in topics %}
+      <li{% if topic.id in active_topics %} class="active"{% endif %}><a href="?topic={{ topic.id }}">{{ topic|upper }}</a></li>
+    {% endfor %}
+    </ul>
+  </aside>
+  <div class="content-block content-right">
+    <div class="search-bar-right">
+      <form method="get" action="" class="search list-search">
+        <input name="q" type="text" size="40" placeholder="поиск..." value="{{ search|default:'' }}" />
+        {% for active_topic in active_topics %}<input name="topic" type="hidden" value="{{ active_topic }}"/>{% endfor %}
+      </form>
+    </div>
+    <div id="update-block">
+      {% include 'organization/list_table.html' %}
+    </div>
+  </div>
+  {#<div class="popular-articles">#}
+  {#  <hr>#}
+  {#  <h2>Популярные статьи</h2>#}
+  {#</div>#}
+</div>
+{% endblock %}

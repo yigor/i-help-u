@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+{% endblock %}
+<div class="content">
+</div>
+{% block script %}
+    <script type="text/javascript">
+        $(function() {
+            showAjaxDialog("{% url 'password_reset' %}");
+        });
+    </script>
+{% endblock %}

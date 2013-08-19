@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block full-width %}
+<div class="full-width profile">
+  <div class="inner">
+    <a href="{{ go_back_url }}" class="go-back">НАЗАД</a>
+    {% if user == object %}<a href="{% url 'account:profile_edit' %}" class="edit edit-profile"></a>{% endif %}
+    <div class="org-logo">
+      <img src="{% if object.avatar %}{{ object.avatar.url }}{% else %}/static/img/zero_photo_ihulogo.png{% endif %}" alt="{{ object }}" />
+    </div>
+    <div class="prof-info">
+      <p class="head">Пользователь:</p>
+      <h1>{{ object }}</h1>
+{#        <p class="info">Статус</p>#}
+    </div>
+  </div>
+</div>
+{% endblock%}
+{% block content %}
+<div class="content">
+  <div class="org-info-more">
+{#    <h1>{{ object.status }}</h1>#}
+    <div class="org-contacts profile-info">
+      <hr>
+      {% if object.about %}
+      <div class="profile-info-item">
+        <h3>О себе</h3>
+        <div class="contacts-social">
+          <p>{{ object.about|linebreaksbr }}</p>
+        </div>
+      </div>
+      {% endif %}
+      {% if object.i_can %}
+      <div class="profile-info-item">
+        <h3>Я умею</h3>
+        <div class="contacts-social">
+          <p>{{ object.i_can|linebreaksbr }}</p>
+        </div>
+      </div>
+      {% endif %}
+      {% if object.i_want %}
+      <div class="profile-info-item">
+        <h3>Я хочу</h3>
+        <div class="contacts-social">
+          <p>{{ object.i_want|linebreaksbr }}</p>
+        </div>
+      </div>
+      {% endif %}
+      {% if object.city %}
+      <div class="profile-info-item">
+        <h3>Город</h3>
+        <div class="contacts-social">
+          <p>{{ object.city }}</p>
+        </div>
+      </div>
+      {% endif %}
+      <div class="profile-info-item">
+        <h3>Контакты</h3>
+        <div class="contacts-social">
+          {% if object.phone_number and not object.hide_contacts %}<p>Телефон: {{ object.phone_number }}</p>{% endif %}
+          {% if not object.hide_contacts %}<p>E-mail: {{ object.email|urlize }}</p>{% endif %}
+          {% if object.web_site %}<p>Сайт: {{ object.web_site }}</p>{% endif %}
+          <div class="socials">
+            {% for social in object.ulogin_users.all %}
+            <a href="{{ social.identity }}" target="_blank"><img src="/static/img/{{ social.network }}.png" alt="{{ social.network }}"></a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if object.articles.exists %}
+  <div class="popular-articles">
+    <hr>
+    <h2>Статьи</h2>
+    {% for article in object.articles.all %}
+    <div class="pop-articles">
+      <a href="{% url 'article' article.id %}">
+        <h1>{{ article.title }}</h1>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if object.photosets.exists %}
+  <div class="popular-articles">
+    <hr>
+    <h2>Фоторепортажи</h2>
+    {% for article in object.photosets.all %}
+    <div class="pop-articles">
+      <a href="{% url 'article' article.id %}">
+        <h1>{{ article.title }}</h1>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="vacancy-list">
+    <hr>
+    <h2>Откликнулся на вакансии</h2>
+    {% for vacancy in responded_vacancies %}
+    <div class="org-vacancies">
+      <a href="{% url 'vacancy_detail' vacancy.id %}">
+        <h1>{{ vacancy.title }}</h1>
+      </a>
+    </div>
+    {% endfor %}
+    {% if more_responded_vacancies %}
+    <a href="#" class="show-more">ПОКАЗАТЬ ЕЩЁ</a>
+    {% endif %}
+  </div>
+
+  <div class="vacancy-list recommended">
+    <hr>
+    <h2>Рекомендованные вакансии</h2>
+    <div id="update-block">
+    {% for vacancy in recommended_vacancies %}
+      <div class="org-vacancies">
+        <a href="{% url 'vacancy_detail' vacancy.id %}">
+          <h1>{{ vacancy.title }}</h1>
+        </a>
+      </div>
+    {% endfor %}
+    </div>
+    {% if more_recommended_vacancies %}
+      <a href="{% url 'vacancy_recommended' 'user' object.id %}?page=2" class="show-more-recommended">ПОКАЗАТЬ ЕЩЁ</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

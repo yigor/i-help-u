@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block title %}{{ object }}{% endblock %}
+{% block head %}
+<meta property="fb:app_id" content="512203725509461" />
+<meta property="og:site_name" content="I help U" />
+<meta property="og:image" content="http://i-help-u.ru{{ article.home_photo.url }}" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="{{ object.title }}" />
+<meta property="og:description" content="{{ object.summary }}" />
+<meta property="og:url" content="http://i-help-u.ru{% url 'article' object.id %}" />
+<link rel="image_src" href="http://i-help-u.ru{{ article.home_photo.url }}">
+{% if not debug %}
+<script type="text/javascript" src="//vk.com/js/api/openapi.js?89"></script>
+<script type="text/javascript">
+    VK.init({apiId: 3587284, onlyWidgets: true});
+</script>
+{% endif %}
+{% endblock %}
+{% block full-width %}
+{% if not debug %}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ru_RU/all.js#xfbml=1&appId=512203725509461";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+{% endif %}
+<div class="full-width articled" style="background-color: {{ object.cover_background }};{% if object.cover_photo %} background-image: url({{ object.cover_photo.url }}{% endif %})">
+  <div class="inner">
+    <div class="article-info">
+      <p class="head">Статья:</p>
+
+      <h1>{{ object.title }}</h1>
+
+      <div class="article-socials">
+        {% if not debug %}
+          <div style="overflow:hidden">
+            <div style="float: left;margin-right:-18px;">
+              <div id="vk_like"></div>
+            </div>
+            <div style="float:left;margin-left:0;margin-right:-50px;">
+              <a href="https://twitter.com/share" class="twitter-share-button" data-via="twitterapi" data-lang="en">Tweet</a>
+            </div>
+            <div style="float:right;">
+              <div class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+            </div>
+          </div>
+          <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+          <script type="text/javascript">
+              VK.Widgets.Like("vk_like", {type: "mini"});
+          </script>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="content">
+  <div class="content-center">
+    <div class="author">
+      {% if object.author %}
+        Текст: <a href="{% url 'account:profile_show' object.author.id %}">{{ object.author }}</a>
+      {% elif object.author_name %}
+        Текст: {{ object.author_name }}
+      {% endif %}
+      {% if object.photographer %}
+        Фото: <a href="{% url 'account:profile_show' object.photographer.id %}">{{ object.photographer }}</a>
+      {% elif object.photographer_name %}
+        Фото: {{ object.photographer_name }}
+      {% endif %}
+    </div>
+    <a href="{{ go_back_url }}" class="go-back-article">НАЗАД</a>
+
+    <div class="article-text">
+      {% autoescape off %}{{ object.body }}{% endautoescape %}
+    </div>
+  </div>
+  <div class="vacancy-list recommended">
+    <hr>
+    <h2>Рекомендованные вакансии</h2>
+    <div id="update-block">
+    {% for vacancy in recommended_vacancies %}
+      <div class="org-vacancies">
+        <a href="{% url 'vacancy_detail' vacancy.id %}">
+          <h1>{{ vacancy.title }}</h1>
+        </a>
+      </div>
+    {% endfor %}
+    {% if more_recommended_vacancies %}
+      <a href="{% url 'vacancy_recommended' 'article' object.id %}?page=2" class="show-more-recommended">ПОКАЗАТЬ ЕЩЁ</a>
+    {% endif %}
+    </div>
+  </div>
+  <div class="comments">
+    <hr>
+    <h2>Комментарии к статье</h2>
+    <a href="#add-comment-main" id="comment-scroll">ДОБАВИТЬ КОММЕНТАРИЙ</a>
+    <div class="comments-inner">
+      {% for comment in comments %}
+      <div class="comments-branch">
+        {% include 'article/comment.html' %}
+      {% for sub_comment in comment.children.all %}
+        {% include 'article/comment.html' with comment=sub_comment %}
+      {% endfor %}
+      </div>
+      {% endfor %}
+      <div class="add-comment" id="add-comment-main">
+        {% if user.is_authenticated %}
+        <img src="{% if user.avatar_small %}{{ user.avatar_small.url }}{% else %}/static/img/zero_photo_ihulogo_small.png{% endif %}" alt="{{ user }}">
+        <form method="post" action="{% url 'comment_add' object.id %}">
+          {% csrf_token %}
+          <textarea name="body" class="add-comment-big"></textarea>
+          <div class="errorlist"></div>
+          <input type="submit" value="Комментировать" />
+        </form>
+        {% else %}
+        <p>Чтобы комментировать, <a class="login" href="{% url 'account:login' %}">войдите</a></p>
+        {% endif %}
+        <a class="show-comment-form" href="#" style="display: none;">Комментировать</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

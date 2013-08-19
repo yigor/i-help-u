@@ -1,0 +1,15 @@
+<div class="login-register">
+  <div class="log-reg">
+    <form id="ajax-form" method="post" action="{% url 'password_reset_confirm' uidb36=uidb36 token=token %}">
+      {% csrf_token %}
+      <div class="form_description">
+        <h2>Сброс пароля</h2>
+      </div>
+      <ul>
+        {% include 'form.html' %}
+      </ul>
+      <div><input id="ajax-submit" type="submit" name="reg" value="Изменить пароль"/>
+      </div>
+    </form>
+  </div>
+</div>

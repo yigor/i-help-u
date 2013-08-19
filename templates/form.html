@@ -1,0 +1,26 @@
+{% for field in form.visible_fields %}
+  <li>
+    {% if field.field.widget.input_type != 'checkbox' %}
+      <label for="{{ field.name }}">{{ field.label|capfirst }}</label>
+      {% if field.field.required %}<span class="required">*</span>{% endif %}
+      <div>
+        {{ field }}
+        {% if field.help_text %}<span class="help-text">{{ field.help_text }}</span>{% endif %}
+        {% if field.errors %}{{ field.errors }}{% endif %}
+      </div>
+    {% else %}
+      <span>
+        {{ field }}
+        <label for="{{ field.name }}">{{ field.label|capfirst }}</label>
+        {% if field.help_text %}<span class="help-text">{{ field.help_text }}</span>{% endif %}
+        {% if field.errors %}{{ field.errors }}{% endif %}
+      </span>
+    {% endif %}
+  </li>
+{% endfor %}
+{% for error in form.non_field_errors %}
+  <span class="errorlist">{{ error }}</span>
+{% endfor %}
+{% for field in form.hidden_fields %}
+  {{ field }}
+{% endfor %}

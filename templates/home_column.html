@@ -1,0 +1,20 @@
+{% for article in column %}
+<div class="main-post"{% if not article.home_photo %} style="padding-top: 53px;" {% endif %}>
+  <a href="{% url 'article' article.id %}">
+    <span class="papper">СТАТЬЯ</span>
+    {% if article.home_photo %}
+      {% if odd_column_number and forloop.counter0|divisibleby:2 %}
+        <img src="{{ article.home_photo.url }}" alt="{{ article.title }}">
+      {% elif not odd_column_number and forloop.counter|divisibleby:2 %}
+        <img src="{{ article.home_photo.url }}" alt="{{ article.title }}">
+      {% else %}
+        <div style="height: 50px;"></div>
+      {% endif %}
+    {% else %}
+      <div style="height: 50px;"></div>
+    {% endif %}
+    <h2>{{ article.title }}</h2>
+    <p>{{ article.summary }}</p>
+  </a>
+</div>
+{% endfor %}

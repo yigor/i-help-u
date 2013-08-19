@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}{{ object }}{% endblock %}
+{% block full-width %}
+<div class="full-width pictured" style="background-color: {{ object.cover_background }};{% if object.cover_photo %} background-image: url({{ object.cover_photo.url }}{% endif %})">
+  <div class="inner">
+    <a href="{{ go_back_url }}" class="go-back">НАЗАД</a>
+    <div class="org-info">
+      <p class="head">Организация:</p>
+      <h1>{{ object.title }}</h1>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="content">
+  <div class="org-info-more">
+    <h1>{{ object.slogan }}</h1>
+    <p>{{ object.description|linebreaksbr }}</p>
+    <div class="org-contacts">
+      <hr>
+      <h3>Контакты</h3>
+      <div class="contacts-social">
+        {% if object.contact_person %}<p>Контактное лицо: {{ object.contact_person }}</p>{% endif %}
+        {% if object.phone_number %}<p>Телефон: {{ object.phone_number }}</p>{% endif %}
+        {% if object.email %}<p>E-mail: {{ object.email|urlize }}</p>{% endif %}
+        {% if object.web_site %}<p>Сайт: {{ object.web_site|urlize }}</p>{% endif %}
+        <div class="socials">
+          {% for link in object.social_links.all %}
+          <a href="{{ link.identity }}"><img src="/static/img/{{ link.network }}.png" alt="{{ link.network }}"></a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="vacancy-list">
+    <hr>
+    <h2>вакансии компании</h2>
+    {% for vacancy in own_vacancies %}
+      <div class="org-vacancies">
+        <a href="{% url 'vacancy_detail' vacancy.id %}">
+          <h1>{{ vacancy.title }}</h1>
+        </a>
+      </div>
+    {% endfor %}
+    {% if more_own_vacancies %}
+      <a href="#" class="show-more">ПОКАЗАТЬ ЕЩЁ</a>
+    {% endif %}
+  </div>
+
+  <div class="vacancy-list recommended">
+    <hr>
+    <h2>Рекомендованные вакансии</h2>
+    <div id="update-block">
+    {% for vacancy in recommended_vacancies %}
+      <div class="org-vacancies">
+        <a href="{% url 'vacancy_detail' vacancy.id %}">
+          <h1>{{ vacancy.title }}</h1>
+        </a>
+      </div>
+    {% endfor %}
+    </div>
+    {% if more_recommended_vacancies %}
+      <a href="{% url 'vacancy_recommended' 'organization' object.id %}?page=2" class="show-more-recommended">ПОКАЗАТЬ ЕЩЁ</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% for object in object_list %}
+  <div class="organization">
+    <h1><a href="{% url 'organization_detail' object.id %}">{{ object.title }}</a></h1>
+    <p><a href="{% url 'organization_detail' object.id %}">{{ object.description|linebreaksbr|truncatechars:240 }}</a></p>
+    <hr {% if forloop.last %}class="last-line" style="visibility: hidden;"{% endif %}>
+  </div>
+{% endfor %}
+{% if page_obj.has_next %}<button class="btn-load-more" onclick="loadMore(this)" data-load-url="{% url 'organization_list' %}"
+                                  data-next-page="{{ page_obj.next_page_number }}" {% if page_obj.link_postfix %}data-link_postfix="{{ page_obj.link_postfix|iriencode }}"{% endif %}>ЗАГРУЗИТЬ ЕЩЁ</button>{% endif %}

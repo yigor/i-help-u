@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Вакансии{% endblock %}
+{% block content %}
+<div class="content">
+  <aside class="aside-left">
+    <h1>Вакансии</h1>
+    <ul class="subnav filter">
+      <li{% if not active_topics and not continuous and not recommended %} class="active"{% endif %}><a href="{% url 'vacancy_list' %}" class="clear-filter">ВСЕ</a></li>
+      {% if user.is_authenticated %}
+        <li{% if recommended %} class="active"{% endif %}><a href="?recommended=1">рекомендации</a></li>
+      {% endif %}
+    </ul>
+    <h2>ТЕМЫ</h2>
+    <ul class="subnav filter">
+      {% for topic in topics %}
+      <li{% if topic.id in active_topics %} class="active"{% endif %}><a href="?topic={{ topic.id }}">{{ topic|upper }}</a></li>
+      {% endfor %}
+    </ul>
+    <h2>ФИЛЬТРЫ</h2>
+    <ul class="subnav toggle-filter">
+      <li{% if continuous == '1' %} class="active"{% endif %}><a href="?continuous=1">Постоянные</a></li>
+      <li{% if continuous == '0' %} class="active"{% endif %}><a href="?continuous=0">Временные</a></li>
+    </ul>
+  </aside>
+  <div class="content-block content-right">
+    <div class="search-bar-right">
+      <form method="get" action="" class="search list-search">
+        <input name="q" type="text" size="40" placeholder="поиск..." value="{{ search|default:'' }}" />
+        {% for active_topic in active_topics %}<input name="topic" type="hidden" value="{{ active_topic }}"/>{% endfor %}
+        {% if continuous %}<input name="continuous" type="hidden" value="{{ continuous }}"/>{% endif %}
+      </form>
+    </div>
+    <div id="update-block">
+      {% include 'vacancy/list_table.html' %}
+    </div>
+  </div>
+{#  <div class="popular-articles">#}
+{#    <hr>#}
+{#    <h2>Популярные статьи</h2>#}
+{#  </div>#}
+</div>
+{% endblock %}

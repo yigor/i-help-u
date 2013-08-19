@@ -1,0 +1,10 @@
+{% for object in object_list %}
+<div class="org-vacancies">
+  <a href="{% url 'vacancy_detail' object.id %}">
+    <h1>{{ object.title }}</h1>
+  </a>
+</div>
+{% endfor %}
+{% if page_obj.has_next %}
+  <a href="{% url 'vacancy_recommended' subject_type subject_id %}?page={{ page_obj.next_page_number }}" class="show-more-recommended">ПОКАЗАТЬ ЕЩЁ</a>
+{% endif %}

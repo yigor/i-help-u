@@ -1,0 +1,14 @@
+<div class="comment{% if comment.children.exists %} branch-parent{% endif %}" id="comment_{{ comment.id }}">
+  <div class="comment-head">
+    <a href="{% url 'account:profile_show' comment.author.id %}">
+      <img src="{% if comment.author.avatar_small %}{{ comment.author.avatar_small.url }}{% else %}/static/img/zero_photo_ihulogo_small.png{% endif %}" alt="{{ comment.author }}">
+      <span>{{ comment.author }}</span>
+    </a>
+    <span>{{ comment.date_time }}</span>
+  </div>
+  <div class="comment-text">
+    <p>{{ comment.body }}</p>
+  </div>
+  <a href="#" class="reply" data-comment="{{ comment.id }}" data-reply="{% firstof comment.parent_id comment.id %}">Ответить</a>
+  <hr>
+</div>

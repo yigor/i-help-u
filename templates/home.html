@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block full-width %}
+<div class="full-width articled"
+     style="background-color: {{ main_article.cover_background }};{% if main_article.cover_photo %} background-image: url({{ main_article.cover_photo.url }}{% endif %})">
+  <div class="inner">
+    <div class="search-main">
+      <form method="get" action="{% url 'search' %}">
+        <input id="top-search" name="q" type="text" size="40" placeholder="поиск..."/>
+      </form>
+    </div>
+
+    <div class="article-info mained">
+      <p class="head">Статья:</p>
+      <a href="{% url 'article' main_article.id %}">
+        <h1>{{ main_article.title }}</h1>
+
+        <p>{{ main_article.summary }}</p>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="content content-center content-main">
+  <div class="first-column">
+    {% include 'home_column.html' with column=first_column odd_column_number=True %}
+  </div>
+  <div class="second-column">
+    {% include 'home_column.html' with column=second_column odd_column_number=False %}
+  </div>
+  <div class="third-column">
+    {% include 'home_column.html' with column=third_column odd_column_number=True %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Журнал{% endblock %}
+{% block content %}
+<div class="content">
+  <aside class="aside-left">
+    <h1>Журнал</h1>
+{#    <ul class="subnav">#}
+{#      <li class="active"><a href="#">ВСЕ</a></li>#}
+{#      <li><a href="#">ГОТОВИТСЯ</a></li>#}
+{#    </ul>#}
+  </aside>
+  <div class="content-block content-right">
+    <div id="update-block">
+      {% include 'article/list_table.html' %}
+    </div>
+  </div>
+{#  <div class="popular-articles">#}
+{#    <hr>#}
+{#    <h2>Популярные статьи</h2>#}
+{#  </div>#}
+</div>
+{% endblock %}

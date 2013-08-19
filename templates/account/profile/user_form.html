@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="content login-register">
+  <div class="log-reg profile">
+    {% if object.password %}<div class="password"><a href="{% url 'account:change_password' %}" class="password-change">Сменить пароль</a></div>{% endif %}
+    <div class="photo clearfix">
+      <label>Фото</label>
+
+      <a href="{% url 'account:change_photo' %}" class="photo-change">
+      <div>
+        <img src="{% if object.avatar %}{{ object.avatar.url }}{% else %}/static/img/zero_photo_ihulogo.png{% endif %}" alt="{{ object }}" />
+        <img src="/static/img/profile-edit.png" class="photo-change-edit" />
+      </div>
+      </a>
+    </div>
+    {% if object.empty_social_profiles %}
+    <div class="social clearfix">
+      <label>Добавить профиль в социальной сети</label>
+        {% url 'account:profile_edit' as next %}
+        <div id="uLogin" class="uLogin"
+             x-ulogin-params="display=buttons&fields=&optional=first_name,last_name,email,nickname,bdate,sex,photo,photo_big,city,phone&providers={{ object.empty_social_profiles }}&hidden=&receiver=http%3A//{{ domain }}/static/xd_custom.html&redirect_uri=http%3A//{{ domain }}/ulogin/postback/%3Fnext%3D{{ next|urlencode }}">
+            {% if 'vkontakte' in object.empty_social_profiles %}<img src="/static/img/lrvk.png" x-ulogin-button="vkontakte"/>{% endif %}
+            {% if 'facebook' in object.empty_social_profiles %}<img src="/static/img/lrfb.png" x-ulogin-button="facebook"/>{% endif %}
+        </div>
+    </div>
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      {% include 'form.html' %}
+      <input type="submit" value="СОХРАНИТЬ" />
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        $(function() {
+            {% if action == 'photo' %}
+            showAjaxDialog("{% url 'account:change_photo' %}");
+            {% elif action == 'password'  %}
+            showAjaxDialog("{% url 'account:change_password' %}");
+            {% endif %}
+        });
+    </script>
+{% endblock %}
